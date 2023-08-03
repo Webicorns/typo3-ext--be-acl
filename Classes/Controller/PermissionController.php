@@ -47,6 +47,8 @@ class PermissionController extends CorePermissionController
 
     public function indexAction(ModuleTemplate $view, ServerRequestInterface $request): ResponseInterface
     {
+        $this->pageRenderer->loadJavaScriptModule('@typo3/beuser/permissions.js');
+
         $view->assignMultiple([
             'currentId' => $this->id,
             'viewTree' => $this->getTree(),
