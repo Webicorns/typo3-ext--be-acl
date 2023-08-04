@@ -100,7 +100,7 @@
 							</td>
 							<td class="permission-column-group">
 								<f:render
-										partial="Permission/OwnerAclName"
+										partial="Permission/Ownername"
 										arguments="{
                                         pageId: '{data.row.uid}',
                                         userId: '{data.row.perms_userid}',
@@ -114,7 +114,7 @@
 							</td>
 							<td class="permission-column-group">
 								<f:render
-										partial="Permission/GroupAclName"
+										partial="Permission/Groupname"
 										arguments="{
                                         pageId: '{data.row.uid}',
                                         groupId: '{data.row.perms_groupid}',
