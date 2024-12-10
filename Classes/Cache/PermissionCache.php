@@ -4,6 +4,7 @@ namespace JBartels\BeAcl\Cache;
 
 use JBartels\BeAcl\Exception\RuntimeException;
 use TYPO3\CMS\Core\Authentication\BackendUserAuthentication;
+use TYPO3\CMS\Core\Authentication\GroupResolver;
 use TYPO3\CMS\Core\Cache\CacheManager;
 use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
 use TYPO3\CMS\Core\SingletonInterface;
@@ -70,12 +71,15 @@ class PermissionCache implements SingletonInterface
      */
     protected $timestampUtility;
 
+    protected GroupResolver $groupResolver;
+
     /**
      * Initializes the timestamp utility.
      */
-    public function __construct()
+    public function __construct(GroupResolver $groupResolver)
     {
         $this->initializeRequiredClasses();
+        $this->groupResolver = $groupResolver;
     }
 
     /**
@@ -128,7 +132,7 @@ class PermissionCache implements SingletonInterface
      * Sets the Backend user for which the cache entries will be managed.
      *
      * @param BackendUserAuthentication $backendUser The Backend user for which the
-        cache is managed
+    cache is managed
      */
     public function setBackendUser($backendUser)
     {
@@ -204,11 +208,22 @@ class PermissionCache implements SingletonInterface
      */
     protected function getCacheIdentifier($requestedPermissions = '')
     {
+
         if (! isset($this->backendUser)) {
             throw new RuntimeException('The Backend user needs to be initializes before the cache identifier can be generated.');
         }
 
-        $identifier = $this->backendUser->user['uid'] . ';' . $this->backendUser->user['usergroup_cached_list'] . ';' . $this->backendUser->user['workspace_id'];
+        $usergroupUids = [];
+
+        $usergroupList = $this->groupResolver->resolveGroupsForUser($this->backendUser->user, 'be_groups');
+
+        if($usergroupList && count($usergroupList) > 0) {
+            $usergroupUids = array_unique(array_map(function($usergroup) {
+                return $usergroup['uid'];
+            }, $usergroupList));
+        }
+
+        $identifier = $this->backendUser->user['uid'] . ';' . implode(',', $usergroupUids) . ';' . $this->backendUser->user['workspace_id'];
 
         $requestedPermissions = trim($requestedPermissions);
         if ($requestedPermissions !== '') {
