@@ -73,6 +73,8 @@ class PermissionCache implements SingletonInterface
 
     protected GroupResolver $groupResolver;
 
+    protected $usergroupUids = [];
+
     /**
      * Initializes the timestamp utility.
      */
@@ -213,17 +215,17 @@ class PermissionCache implements SingletonInterface
             throw new RuntimeException('The Backend user needs to be initializes before the cache identifier can be generated.');
         }
 
-        $usergroupUids = [];
+        if(count($this->usergroupUids) == 0) {
+            $usergroupList = $this->groupResolver->resolveGroupsForUser($this->backendUser->user, 'be_groups');
 
-        $usergroupList = $this->groupResolver->resolveGroupsForUser($this->backendUser->user, 'be_groups');
-
-        if($usergroupList && count($usergroupList) > 0) {
-            $usergroupUids = array_unique(array_map(function($usergroup) {
-                return $usergroup['uid'];
-            }, $usergroupList));
+            if($usergroupList && count($usergroupList) > 0) {
+                $this->usergroupUids = array_unique(array_map(function($usergroup) {
+                    return $usergroup['uid'];
+                }, $usergroupList));
+            }
         }
 
-        $identifier = $this->backendUser->user['uid'] . ';' . implode(',', $usergroupUids) . ';' . $this->backendUser->user['workspace_id'];
+        $identifier = $this->backendUser->user['uid'] . ';' . implode(',', $this->usergroupUids) . ';' . $this->backendUser->user['workspace_id'];
 
         $requestedPermissions = trim($requestedPermissions);
         if ($requestedPermissions !== '') {
