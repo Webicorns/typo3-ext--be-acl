@@ -49,7 +49,7 @@ class DataHandlerHook
      * @param array $updatedFields Array of changed fiels and their new values.
      * @param DataHandler $tceMain TCEmain parent object.
      */
-    public function processDatamap_afterDatabaseOperations($status, $table, mixed $recordId, $updatedFields, $tceMain)
+    public function processDatamap_afterDatabaseOperations(string $status, string $table, mixed $recordId, array $updatedFields, DataHandler $tceMain): void
     {
         // When a new page is created we update the permission timestamp
         // in the cache so that all Backend users recalculate their
@@ -76,12 +76,13 @@ class DataHandlerHook
      * @param DataHandler $tceMain The TCEmain parent object.
      */
     public function processCmdmap_postProcess(
-        $command,
-        $table,
-        $recordId,
-        $commandValue,
+        string      $command,
+        string      $table,
+        int         $recordId,
+        array       $commandValue,
         DataHandler $tceMain
-    ) {
+    ): void
+    {
         // This is required to take care of deleted ACLs.
         if ($table == 'tx_beacl_acl') {
             $this->flushPermissionCache();
@@ -91,7 +92,7 @@ class DataHandlerHook
     /**
      * Flushes the permission cache.
      */
-    protected function flushPermissionCache()
+    protected function flushPermissionCache(): void
     {
         /** @var PermissionCache $permissionCache */
         $permissionCache = GeneralUtility::makeInstance(PermissionCache::class);
@@ -106,7 +107,7 @@ class DataHandlerHook
      * @param array $data
      * @return mixed
      */
-    public function checkRecordUpdateAccess($table, $id, $data, mixed &$res, DataHandler $dataHandler)
+    public function checkRecordUpdateAccess(string $table, int $id, array $data, mixed &$res, DataHandler $dataHandler)
     {
         if ($table === 'pages') {
             /**
@@ -118,8 +119,7 @@ class DataHandlerHook
                     ->removeAll()
                     ->add(GeneralUtility::makeInstance(DeletedRestriction::class));
                 $languageParent = $queryBuilder->select('l10n_parent')
-                    ->from('pages')->where($queryBuilder->expr()->eq('uid', (int) $id))->executeQuery()
-                    ->fetchColumn();
+                    ->from('pages')->where($queryBuilder->expr()->eq('uid', (int) $id))->executeQuery()->fetchOne();
 
                 if ($languageParent) {
                     return $dataHandler->checkRecordUpdateAccess($table, $languageParent);

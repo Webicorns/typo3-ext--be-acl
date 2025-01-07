@@ -26,8 +26,6 @@ use TYPO3Fluid\Fluid\Core\ViewHelper\Traits\CompileWithRenderStatic;
  */
 class ArrayElementViewHelper extends AbstractViewHelper
 {
-    use CompileWithRenderStatic;
-
     public function initializeArguments(): void
     {
         $this->registerArgument('array', 'array', 'Array to search in', true);
@@ -40,23 +38,18 @@ class ArrayElementViewHelper extends AbstractViewHelper
      *
      * @throws Exception
      */
-    public static function renderStatic(
-        array $arguments,
-        \Closure $renderChildrenClosure,
-        RenderingContextInterface $renderingContext
-    ): string {
-        $array = $arguments['array'];
-        $key = $arguments['key'];
-        $subKey = $arguments['subKey'];
+    public function render(): string
+    {
+        $array = $this->arguments['array'];
+        $key = $this->arguments['key'];
+        $subKey = $this->arguments['subKey'];
         $result = 0;
-
         if (is_array($array)) {
             $result = static::getValue($array, $key);
             if (is_array($result) && $subKey) {
                 $result = static::getValue($result, $subKey);
             }
         }
-
         if (! is_scalar($result)) {
             throw new Exception(
                 'Only scalar or null return values (string, int, float or double, null) are supported.',
