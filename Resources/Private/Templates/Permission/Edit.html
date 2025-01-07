@@ -165,7 +165,6 @@
 				<f:if condition="{pageAcls->f:count()} > 0">
 					<f:then>
 						<f:for each="{pageAcls}" as="pageAcl" key="oid">
-
 							<f:render
 									partial="Permission/EditAclRow"
 									arguments="{

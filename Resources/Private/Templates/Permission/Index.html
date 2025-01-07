@@ -179,13 +179,13 @@
 							<td colspan="6"></td>
 						</f:else>
 					</f:if>
-					<td nowrap="nowrap"><small><strong><ba:arrayElement array="{aclList}" key="{data.row.uid}" subKey="meta.0.acls" /></strong> <f:translate key='LLL:EXT:be_acl/Resources/Private/Languages/locallang_perm.xlf:acls' /><br />
+					<td nowrap="nowrap 4" colspan="2"><small><strong><ba:arrayElement array="{aclList}" key="{data.row.uid}" subKey="meta.0.acls" /></strong> <f:translate key='LLL:EXT:be_acl/Resources/Private/Languages/locallang_perm.xlf:acls' /><br />
 						<strong><ba:arrayElement array="{aclList}" key="{data.row.uid}" subKey="meta.0.inherited" /></strong> <f:translate key='LLL:EXT:be_acl/Resources/Private/Languages/locallang_perm.xlf:aclsInherited' /></small>
 					</td>
 					<f:if condition="{userSelectedAcls->f:count()} > 0">
 
 						<f:for each="{userSelectedAcls}" as="userAcl" key="oid">
-							<td nowrap="nowrap">
+							<td nowrap="nowrap 3" colspan="2">
 								<ba:permissions permission="{ba:arrayElement(array:aclList, key:data.row.uid, subKey:'0.{oid}.permissions')}" scope="useracl" pageId="{data.row.uid}" />
 								<f:alias map="{appliedAclPid: '{ba:arrayElement(array:aclList, key:data.row.uid, subKey:\'0.{oid}.pid\')}'}">
 									<f:if condition="{appliedAclPid}"><span class="fa fa-info-circle" data-toggle="tooltip" data-placement="top" title="<f:translate key='LLL:EXT:be_acl/Resources/Private/Languages/locallang_perm.xlf:recursiveAclPage' />{appliedAclPid}"></span></f:if>
@@ -193,13 +193,13 @@
 							</td>
 						</f:for>
 					</f:if>
-					<td nowrap="nowrap"><small><strong><ba:arrayElement array="{aclList}" key="{data.row.uid}" subKey="meta.1.acls" /></strong> <f:translate key='LLL:EXT:be_acl/Resources/Private/Languages/locallang_perm.xlf:acls' /><br />
+					<td nowrap="nowrap 2"><small><strong><ba:arrayElement array="{aclList}" key="{data.row.uid}" subKey="meta.1.acls" /></strong> <f:translate key='LLL:EXT:be_acl/Resources/Private/Languages/locallang_perm.xlf:acls' /><br />
 						<strong><ba:arrayElement array="{aclList}" key="{data.row.uid}" subKey="meta.1.inherited" /></strong> <f:translate key='LLL:EXT:be_acl/Resources/Private/Languages/locallang_perm.xlf:aclsInherited' /></small>
 					</td>
 
 					<f:if condition="{groupSelectedAcls->f:count()} > 0">
 						<f:for each="{groupSelectedAcls}" as="groupAcl" key="oid">
-							<td nowrap="nowrap">
+							<td nowrap="nowrap 1">
 								<ba:permissions permission="{ba:arrayElement(array:aclList, key:data.row.uid, subKey:'1.{oid}.permissions')}" scope="groupacl" pageId="{data.row.uid}" />
 								<f:alias map="{appliedAclPid: '{ba:arrayElement(array:aclList, key:data.row.uid, subKey:\'1.{oid}.pid\')}'}">
 									<f:if condition="{appliedAclPid}">
