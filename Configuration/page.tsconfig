@@ -1,5 +1,5 @@
 templates {
-    p2media/be-acl {
+    typo3/cms-beuser {
         20 = typo3/cms-beuser:Resources/Private
         30 = p2media/be-acl:Resources/Private
     }
