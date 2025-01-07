@@ -10,9 +10,15 @@ return [
         'label' => 'uid',
         'tstamp' => 'tstamp',
         'crdate' => 'crdate',
+        'cruser_id' => 'cruser_id',
         'type' => 'type',
+        'securtiy' => [
+            'ignorePageTypeRestriction' => true,
+        ],
         'default_sortby' => 'ORDER BY type',
-        'iconfile' => 'EXT:be_acl/Resources/Public/Icons/icon_tx_beacl_acl.gif',
+        'typeicon_classes' => [
+            'default' => 'tx_beacl-object-info',
+        ]
     ],
     'columns' => [
         'type' => [
@@ -22,8 +28,8 @@ return [
                 'type' => 'select',
                 'renderType' => 'selectSingle',
                 'items' => [
-                    ['LLL:EXT:be_acl/Resources/Private/Languages/locallang_db.xlf:tx_beacl_acl.type.I.0', '0'],
-                    ['LLL:EXT:be_acl/Resources/Private/Languages/locallang_db.xlf:tx_beacl_acl.type.I.1', '1'],
+                    ['label' => 'LLL:EXT:be_acl/Resources/Private/Languages/locallang_db.xlf:tx_beacl_acl.type.I.0', 'value' => '0'],
+                    ['label' => 'LLL:EXT:be_acl/Resources/Private/Languages/locallang_db.xlf:tx_beacl_acl.type.I.1', 'value' => '1'],
                 ],
                 'size' => 1,
                 'maxitems' => 1,
@@ -50,11 +56,11 @@ return [
                 'type' => 'check',
                 'cols' => 5,
                 'items' => [
-                    ['LLL:EXT:be_acl/Resources/Private/Languages/locallang_db.xlf:tx_beacl_acl.permissions.I.0', ''],
-                    ['LLL:EXT:be_acl/Resources/Private/Languages/locallang_db.xlf:tx_beacl_acl.permissions.I.1', ''],
-                    ['LLL:EXT:be_acl/Resources/Private/Languages/locallang_db.xlf:tx_beacl_acl.permissions.I.2', ''],
-                    ['LLL:EXT:be_acl/Resources/Private/Languages/locallang_db.xlf:tx_beacl_acl.permissions.I.3', ''],
-                    ['LLL:EXT:be_acl/Resources/Private/Languages/locallang_db.xlf:tx_beacl_acl.permissions.I.4', ''],
+                    ['label' => 'LLL:EXT:be_acl/Resources/Private/Languages/locallang_db.xlf:tx_beacl_acl.permissions.I.0', ''],
+                    ['label' => 'LLL:EXT:be_acl/Resources/Private/Languages/locallang_db.xlf:tx_beacl_acl.permissions.I.1', ''],
+                    ['label' => 'LLL:EXT:be_acl/Resources/Private/Languages/locallang_db.xlf:tx_beacl_acl.permissions.I.2', ''],
+                    ['label' => 'LLL:EXT:be_acl/Resources/Private/Languages/locallang_db.xlf:tx_beacl_acl.permissions.I.3', ''],
+                    ['label' => 'LLL:EXT:be_acl/Resources/Private/Languages/locallang_db.xlf:tx_beacl_acl.permissions.I.4', ''],
                 ],
             ],
         ],
