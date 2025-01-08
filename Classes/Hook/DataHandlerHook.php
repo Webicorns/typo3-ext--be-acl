@@ -49,7 +49,7 @@ class DataHandlerHook
      * @param array $updatedFields Array of changed fiels and their new values.
      * @param DataHandler $tceMain TCEmain parent object.
      */
-    public function processDatamap_afterDatabaseOperations(string $status, string $table, mixed $recordId, array $updatedFields, DataHandler $tceMain): void
+    public function processDatamap_afterDatabaseOperations(string $status, string $table, mixed $recordId, mixed $updatedFields, DataHandler $tceMain): void
     {
         // When a new page is created we update the permission timestamp
         // in the cache so that all Backend users recalculate their
@@ -79,7 +79,7 @@ class DataHandlerHook
         string      $command,
         string      $table,
         int         $recordId,
-        array       $commandValue,
+        mixed       $commandValue,
         DataHandler $tceMain
     ): void
     {
