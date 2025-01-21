@@ -45,17 +45,12 @@ class UserAuthGroup
     /**
      * @var array
      */
-    protected $aclDisallowed;
+    protected array $aclDisallowed;
 
     /**
      * @var array
      */
-    protected $aclPageList;
-
-    /**
-     * @var \TYPO3\CMS\Core\Database\DatabaseConnection
-     */
-    protected $db;
+    protected array $aclPageList;
 
     /**
      * Returns a combined binary representation of the current users permissions for the page-record, $row.
@@ -105,7 +100,7 @@ class UserAuthGroup
                     $out |= $result['permissions'];
                     $takeUserIntoAccount = 0;
                 } elseif ($result['type'] == 1
-                    && $this->isMemberOfGroup($result['object_id'])
+                    && $this->isMemberOfGroup($result['object_id'], $that->userGroupsUID)
                     && ! in_array($result['object_id'], $groupIdsAlreadyUsed)
                 ) {
                     $out |= $result['permissions'];
@@ -285,10 +280,10 @@ class UserAuthGroup
         return (bool) GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('be_acl', 'disableOldPermissionSystem');
     }
 
-    private function isMemberOfGroup(int $groupId):bool
+    private function isMemberOfGroup(int $groupId, array $userGroupsUid):bool
     {
-        if (!empty($this->userGroupsUID) && $groupId) {
-            return in_array($groupId, $this->userGroupsUID, true);
+        if (!empty($userGroupsUid) && $groupId) {
+            return in_array($groupId, $userGroupsUid, true);
         }
         return false;
     }
