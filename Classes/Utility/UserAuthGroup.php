@@ -28,12 +28,13 @@ use JBartels\BeAcl\Cache\PermissionCache;
 use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Core\Authentication\BackendUserAuthentication;
 use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
+use TYPO3\CMS\Core\Context\Context;
+use TYPO3\CMS\Core\Context\UserAspect;
 use TYPO3\CMS\Core\Database\Connection;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Database\Query\Expression\ExpressionBuilder;
 use TYPO3\CMS\Core\Database\Query\Restriction\DeletedRestriction;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
 
 /**
  * Backend ACL - Functions re-calculating permissions
@@ -51,6 +52,15 @@ class UserAuthGroup
      * @var array
      */
     protected array $aclPageList;
+
+    protected UserAspect $backendUser;
+
+    public function __construct()
+    {
+        /** @var Context $context */
+        $context = GeneralUtility::makeInstance(Context::class);
+        $this->backendUser = $context->getAspect('backend.user');
+    }
 
     /**
      * Returns a combined binary representation of the current users permissions for the page-record, $row.
@@ -100,7 +110,7 @@ class UserAuthGroup
                     $out |= $result['permissions'];
                     $takeUserIntoAccount = 0;
                 } elseif ($result['type'] == 1
-                    && $this->isMemberOfGroup($result['object_id'], $that->userGroupsUID)
+                    && $this->isMemberOfGroup($result['object_id'])
                     && ! in_array($result['object_id'], $groupIdsAlreadyUsed)
                 ) {
                     $out |= $result['permissions'];
@@ -280,10 +290,10 @@ class UserAuthGroup
         return (bool) GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('be_acl', 'disableOldPermissionSystem');
     }
 
-    private function isMemberOfGroup(int $groupId, array $userGroupsUid):bool
+    private function isMemberOfGroup(int $groupId):bool
     {
-        if (!empty($userGroupsUid) && $groupId) {
-            return in_array($groupId, $userGroupsUid, true);
+        if (!empty($this->backendUser->getGroupIds()) && $groupId) {
+            return in_array($groupId, $this->backendUser->getGroupIds(), true);
         }
         return false;
     }
